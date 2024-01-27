@@ -1,6 +1,12 @@
-body {
+html {
 	background-color : #E6E6FA;
 	font-size : 14px;
 	width : 100vw;
 }
 
+html h1 {
+	font-size : 150%;
+}
+h1 h2 {
+	font-size : 80%;
+}
