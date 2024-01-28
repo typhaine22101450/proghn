@@ -4,9 +4,5 @@ html {
 	width : 100vw;
 }
 
-html h1 {
-	font-size : 150%;
-}
-h1 h2 {
-	font-size : 80%;
-}
+h0 h1 {font-size : 150%;}
+h1 h2 {font-size : 80%;}
