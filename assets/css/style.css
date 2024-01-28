@@ -12,7 +12,9 @@ h1 h2 {font-size : 90%; /*taille du titre 2 10% inférieur à la taille du titre
 	border : 2px black solid;
 	background-color : #F8F8FF;
 }
-.entete {display : block;}
+.entete {
+	display : block;
+}
 #aboutme {margin-left : 10px; /*marge gauche du bloc décalée*/} 
 table, th, td {border: 1px solid black; /*ajout de bordures pour chaque cellule du tableau*/}
 	
