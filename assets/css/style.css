@@ -13,10 +13,10 @@ h1 h2 {font-size : 90%; /*taille du titre 2 10% inférieur à la taille du titre
 	background-color : #F8F8FF;
 }
 .entete {content : center;}
-#aboutme {margin-left : 10px}
-table, th, td {border: 1px solid black;}
+#aboutme {margin-left : 10px; /*marge gauche du bloc décalée*/} 
+table, th, td {border: 1px solid black; /*ajout de bordures pour chaque cellule du tableau*/}
 	
 footer {
 	text-align : center;
-	background-color : #F0F8FF
+	background-color : #F0F8FF;
 	}
