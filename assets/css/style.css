@@ -8,7 +8,7 @@ h0 h1 {font-size : 150%; /*taille du titre 1 50% supérieur au texte de la page*
 h1 h2 {font-size : 90%; /*taille du titre 2 10% inférieur à la taille du titre 1*/}
 
 #page {
-	margin : 10px 20px 20px 10px;
-	border : 10px black solid;
+	margin : 30px 80px 80px 30px;
+	border : 5px black solid;
 	background : #F8F8FF;
 }
