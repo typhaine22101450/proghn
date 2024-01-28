@@ -14,7 +14,9 @@ h1 h2 {font-size : 90%; /*taille du titre 2 10% inférieur à la taille du titre
 }
 
 .entete {
-	justify-content : center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 #aboutme {margin-left : 10px; /*marge gauche du bloc décalée*/} 
