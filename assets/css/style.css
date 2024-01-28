@@ -16,6 +16,7 @@ h1 h2 {font-size : 90%; /*taille du titre 2 10% inférieur à la taille du titre
 .entete {
 	display : flex;
 	justify-content :center;
+	align-items : center;
 }
 
 #aboutme {margin-left : 10px; /*marge gauche du bloc décalée*/} 
