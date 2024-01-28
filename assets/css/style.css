@@ -13,13 +13,9 @@ h1 h2 {font-size : 90%; /*taille du titre 2 10% inférieur à la taille du titre
 	background-color : #F8F8FF;
 }
 
-.entete {
-	display : flex;
-	justify-content :center;
-	align-items : center;
-}
+.entete {justify-content :center;}
 
-#aboutme {margin-left : 10px; /*marge gauche du bloc décalée*/} 
+#aboutme {margin-left : 20px; /*marge gauche du bloc décalée*/} 
 table, th, td {border : 1px solid black; /*ajout de bordures pour chaque cellule du tableau*/}
 	
 footer {
