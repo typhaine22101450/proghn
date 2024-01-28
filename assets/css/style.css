@@ -14,6 +14,7 @@ h1 h2 {font-size : 90%; /*taille du titre 2 10% inférieur à la taille du titre
 }
 .entete {content : center;}
 #aboutme {margin-left : 10px}
+table, th, td {border: 1px solid black;}
 	
 footer {
 	text-align : center;
