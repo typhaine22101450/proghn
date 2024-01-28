@@ -10,9 +10,12 @@ h1 h2 {font-size : 90%; /*taille du titre 2 10% inférieur à la taille du titre
 #page {
 	margin : 30px 80px 80px 30px;
 	border : 2px black solid;
-	background : #F8F8FF;
+	background-color : #F8F8FF;
 }
-.entete {margin : center;}
+.entete {content : center;}
 #aboutme {margin-left : 10px}
 	
-footer {text-align : center;}
+footer {
+	text-align : center;
+	background-color : #F0F8FF
+	}
