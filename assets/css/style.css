@@ -8,14 +8,12 @@ h0 h1 {font-size : 150%; /*taille du titre 1 50% supérieur au texte de la page*
 h1 h2 {font-size : 90%; /*taille du titre 2 10% inférieur à la taille du titre 1*/}
 
 #page {
-	margin : 30px 80px 80px 30px;
-	justify-content : center;
+	margin : 30px 80px 30px 80px;
 	border : 2px black solid;
 	background-color : #F8F8FF;
 }
 
 .entete {
-	display : inline;
 	justify-content: center;
 }
 
