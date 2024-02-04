@@ -17,7 +17,9 @@ h2 {font-size : 2em;}
 
 #aboutme {margin-left : 20px; /*marge gauche du bloc décalée*/} 
 table, th, td {border : 1px solid black; /*ajout de bordures pour chaque cellule du tableau*/}
-	
+
+#devoirs {margin-left : 20px;}
+
 footer {
 	text-align : center;
 	background-color : #F0F8FF;
