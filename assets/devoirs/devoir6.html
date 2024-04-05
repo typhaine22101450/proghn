@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/blima@0.9.4/css/blima.min.css">
+        <meta charset="UTF-8" />
+        <title>Devoir 6</title>
+    <!-- Chemin vers fichier js à ajouter-->
+        <script type="text/javascript" language="javascript" src="../js/devoir6.js" async></script>
+    </head>
+
+
+    <body style="background-color:grey;">
+        <section class="section culumn is-half is-offset-one-quarter" style="background-color:F8F8F8;">
+            <div class="container" style="text-align:center;">
+                <div class="block" >
+                <span class="title">
+                    
+                    
+                    <p><strong style="color:red; font-size: 30px;;">Ne pas oublier d'ajouter le chemin vers le fichier devoir6.js!!!</strong></p>
+                </span>
+                </div>
+                <div class="hero-body" style="text-align:justify;">
+                    <h2 class="has-background-info has-text-white">Analyseur automatique de poèmes</h2>
+                                   
+                    <p>Écrivez un fichier devoir6.js comprenant une ou plusieurs fonctions qui afficheront une fois que le 
+                        bouton "Analyser le poème" aura été cliqué: </p>
+                        <ul>
+                            <li>les dix mots les plus fréquents du poème (titre exclus)</li>
+                            <li>la richesse lexicale du poème sous forme de pourcentage (titre exclus)</li>
+                            <li>le nombre de phrases du poème (titre exclus)</li>
+                            <li>la longueur moyenne des mots par phrase (titre exclus)</li>
+                            <li> Typologie des strophes : le nombre total de strophes et une classification des strophes.
+                              Exemple: Ce poème contient n strophes : x strophes de 4 vers (n° strophes), y strophes de 6 vers (n° strophes), etc.  
+                            </li>
+                            <li> Typologie des vers (le nombre de syllabes par vers, celui peut être approximatif à une voire 2 syllabes près).
+                                Exemple: Ce poème contient n vers : x vers de 12 syllabes vers (n° vers), y vers de 10 syllabes (n° vers), etc.  
+                            </li>
+                            <li>Les trois poèmes sur lesquels vous avez testé votre code (le vôtre et 2 poèmes de vos camarades)</li>
+
+                        </ul>
+                        <p> Vous devez afficher les résultats en-dessous ou à droite du poème.</p>
+                      
+                    <br/>
+                    <textarea id="poeme" name="mon_texte" rows="25" cols="60" style="margin-left:45px;">Merci de copier votre poème ici (poème avec titre séparé par une ligne vide).</textarea>
+                    <br/>  <br/> 
+                    <button id="my-button" onclick="MaFonction()" style="margin-left:200px;">Analyser le poème</button>
+                    <!--  Balise supplémentaire pour écrire les résultats <p id="result"><p> -->
+                   
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
