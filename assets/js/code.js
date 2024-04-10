@@ -2,33 +2,23 @@ window.onload = function() {
     let fileInput = document.getElementById('fileInput');
     let fileDisplayArea = document.getElementById('fileDisplayArea');
 
-    // On "écoute" si le fichier donné a été modifié.
-    // Si on a donné un nouveau fichier, on essaie de le lire.
     fileInput.addEventListener('change', function(e) {
-        // Dans le HTML (ligne 22), fileInput est un élément de tag "input" avec un attribut type="file".
-        // On peut récupérer les fichiers données avec le champs ".files" au niveau du javascript.
-        // On peut potentiellement donner plusieurs fichiers,
-        // mais ici on n'en lit qu'un seul, le premier, donc indice 0.
+        
         let file = fileInput.files[0];
-        // on utilise cette expression régulière pour vérifier qu'on a bien un fichier texte.
+
         let textType = new RegExp("text.*");
 
-        if (file.type.match(textType)) { // on vérifie qu'on a bien un fichier texte
-            // lecture du fichier. D'abord, on crée un objet qui sait lire un fichier.
+        if (file.type.match(textType)) { 
             var reader = new FileReader();
 
-            // on dit au lecteur de fichier de placer le résultat de la lecture
-            // dans la zone d'affichage du texte.
             reader.onload = function(e) {
                 fileDisplayArea.innerText = reader.result;
             }
 
-            // on lit concrètement le fichier.
-            // Cette lecture lancera automatiquement la fonction "onload" juste au-dessus.
             reader.readAsText(file);    
 
             document.getElementById("logger").innerHTML = '<span class="infolog">Fichier chargé avec succès</span>';
-        } else { // pas un fichier texte : message d'erreur.
+        } else { 
             fileDisplayArea.innerText = "";
             document.getElementById("logger").innerHTML = '<span class="errorlog">Type de fichier non supporté !</span>';
         }
@@ -80,25 +70,71 @@ function tokenizer(text) {
 }
 
 
-function afficherCooccurrents(mot, intervalleDeLongueur) {
+function afficherCooccurrents() {
+    var mot = document.getElementById('motInput').value;
+    var minLength = parseInt(document.getElementById('minLengthInput').value);
+    var maxLength = parseInt(document.getElementById('maxLengthInput').value);
+    var intervalleDeLongueur = [minLength, maxLength];
+
+
+    if (!mot.trim()) {
+        alert("Veuillez entrer un terme.");
+        return;
+    }
+
+    if (isNaN(minLength) || isNaN(maxLength) || minLength < 0 || maxLength < minLength) {
+        alert("Veuillez entrer des valeurs valides pour l'intervalle de longueur.");
+        return;
+    }
+
     var file = document.getElementById('fileInput').files[0];
     var reader = new FileReader();
 
     reader.onload = function (e) {
         var content = e.target.result;
-        var words = tokenizer(content); 
+        var words = tokenizer(content);
         var cooccurrents = [];
+        var coFrequence = 0;
+        var frequenceGauche = 0;
+        var frequenceDroite = 0;
 
-        words.forEach(function (word) {
+        if (!words.includes(mot)) {
+            alert("Le terme '" + mot + "' ne se trouve pas dans le texte.");
+            return;
+        }
+        
+        words.forEach(function (word, index) {
             if (word.length >= intervalleDeLongueur[0] && word.length <= intervalleDeLongueur[1] && word !== mot) {
                 if (word.includes(mot) || mot.includes(word)) {
                     cooccurrents.push(word);
+                    coFrequence++;
+                    if (index > 0 && words[index - 1] === mot) {
+                        frequenceGauche++;
+                    }
+                    if (index < words.length - 1 && words[index + 1] === mot) {
+                        frequenceDroite++;
+                    }
                 }
             }
         });
 
-        console.log('Cooccurrents pour le mot "' + mot + '" dans un intervalle de longueur de ' + intervalleDeLongueur[0] + ' à ' + intervalleDeLongueur[1] + ':');
-        console.log(cooccurrents);
+        var table = '<table border="1"><tr><th>Cooccurrent(s)</th><th>Co-fréquence</th><th>Fréquence gauche</th><th>% Fréquence gauche</th><th>Fréquence droite</th><th>% Fréquence droite</th></tr>';
+        cooccurrents.forEach(function (cooccurrent) {
+            var pourcentageFrequenceGauche = (frequenceGauche / coFrequence) * 100;
+            var pourcentageFrequenceDroite = (frequenceDroite / coFrequence) * 100;
+            table += '<tr>';
+            table += '<td>' + cooccurrent + '</td>';
+            table += '<td>' + coFrequence + '</td>';
+            table += '<td>' + frequenceGauche + '</td>';
+            table += '<td>' + pourcentageFrequenceGauche.toFixed(2) + '%</td>';
+            table += '<td>' + frequenceDroite + '</td>';
+            table += '<td>' + pourcentageFrequenceDroite.toFixed(2) + '%</td>';
+            table += '</tr>';
+        });
+        table += '</table>';
+
+        var analysisDiv = document.getElementById('page-analysis');
+        analysisDiv.innerHTML = table;
     };
 
     reader.readAsText(file);
