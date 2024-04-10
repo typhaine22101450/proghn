@@ -72,10 +72,9 @@ function tokenizer(text) {
 
 function afficherCooccurrents() {
     var mot = document.getElementById('poleID').value;
-    var minLength = parseInt(document.getElementById('minLengthInput').value);
-    var maxLength = parseInt(document.getElementById('maxLengthInput').value);
+    var minLength = 0;
+    var maxLength = parseInt(document.getElementById('lgID').value);
     var intervalleDeLongueur = [minLength, maxLength];
-
 
     if (!mot.trim()) {
         alert("Veuillez entrer un terme.");
@@ -93,10 +92,8 @@ function afficherCooccurrents() {
     reader.onload = function (e) {
         var content = e.target.result;
         var words = tokenizer(content);
+
         var cooccurrents = [];
-        var coFrequence = 0;
-        var frequenceGauche = 0;
-        var frequenceDroite = 0;
 
         if (!words.includes(mot)) {
             alert("Le terme '" + mot + "' ne se trouve pas dans le texte.");
@@ -104,24 +101,37 @@ function afficherCooccurrents() {
         }
 
         words.forEach(function (word, index) {
-            if (word.length >= intervalleDeLongueur[0] && word.length <= intervalleDeLongueur[1] && word !== mot) {
-                if (word.includes(mot) || mot.includes(word)) {
-                    cooccurrents.push(word);
-                    coFrequence++;
-                    if (index > 0 && words[index - 1] === mot) {
-                        frequenceGauche++;
-                    }
-                    if (index < words.length - 1 && words[index + 1] === mot) {
-                        frequenceDroite++;
-                    }
-                }
+            if (word.length >= intervalleDeLongueur[0] && word.length <= intervalleDeLongueur[1] && word === mot) {
+                if (words[index - 1])
+                    cooccurrents.push(words[index - 1])
+                if (words[index + 1])
+                    words[index + 1]
+                cooccurrents.push(words[index + 1])
             }
         });
+        cooccurrents = [...new Set(cooccurrents)];
 
         var table = '<table border="1"><tr><th>Cooccurrent(s)</th><th>Co-fréquence</th><th>Fréquence gauche</th><th>% Fréquence gauche</th><th>Fréquence droite</th><th>% Fréquence droite</th></tr>';
         cooccurrents.forEach(function (cooccurrent) {
-            var pourcentageFrequenceGauche = (frequenceGauche / coFrequence) * 100;
-            var pourcentageFrequenceDroite = (frequenceDroite / coFrequence) * 100;
+            var frequenceGauche = 0;
+            var frequenceDroite = 0;
+            var coFrequence = 0;
+            words.forEach(function (word, index) {
+                if (word === cooccurrent) {
+                    if (index > 0 && words[index - 1] === mot) {
+                        frequenceDroite++;
+                        coFrequence++;
+                    }
+
+                    if (index < words.length - 1 && words[index + 1] === mot) {
+                        frequenceGauche++;
+                        coFrequence++;
+                    }
+                }
+            });
+
+            var pourcentageFrequenceGauche = coFrequence !== 0 ? (frequenceGauche / coFrequence) * 100 : 0;
+            var pourcentageFrequenceDroite = coFrequence !== 0 ? (frequenceDroite / coFrequence) * 100 : 0;            
             table += '<tr>';
             table += '<td>' + cooccurrent + '</td>';
             table += '<td>' + coFrequence + '</td>';
@@ -139,3 +149,5 @@ function afficherCooccurrents() {
 
     reader.readAsText(file);
 }
+
+
