@@ -43,21 +43,34 @@ function segmentation() {
     reader.onload = function (e) {
         var content = e.target.result;
         var words = content.split(/\s+/);
-        var totalWords = words.length;
+        var wordStats = {};
 
-        words.sort(function (a, b) {
-            return a.length - b.length;
-        });
-
-        var table = '<table border="1"><tr><th>Mot</th><th>Longueur</th></tr>';
         words.forEach(function (word) {
-            table += '<tr><td>' + word + '</td><td>' + word.length + '</td></tr>';
+            var length = word.length;
+
+            if (!wordStats[length]) {
+                wordStats[length] = {
+                    count: 0,
+                    uniqueForms: new Set()
+                };
+            }
+
+            wordStats[length].count++;
+            wordStats[length].uniqueForms.add(word);
         });
+
+       
+        var table = '<table border="1"><tr><th>Nombre de caractères</th><th>Nombre d\'occurrences</th><th>Forme(s) unique(s)</th></tr>';
+        for (var length in wordStats) {
+            var stats = wordStats[length];
+            table += '<tr><td>' + length + '</td><td>' + stats.count + '</td><td>' + Array.from(stats.uniqueForms).join(', ') + '</td></tr>';
+        }
         table += '</table>';
 
         var analysisDiv = document.getElementById('page-analysis');
-        analysisDiv.innerHTML = '<p>Nombre total de mots : ' + totalWords + '</p>' + table;
+        analysisDiv.innerHTML = table;
     };
 
     reader.readAsText(file);
 }
+
