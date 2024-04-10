@@ -34,3 +34,30 @@ window.onload = function() {
         }
     });
 }
+
+
+function segmentation() {
+    var file = document.getElementById('fileInput').files[0];
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+        var content = e.target.result;
+        var words = content.split(/\s+/);
+        var totalWords = words.length;
+
+        words.sort(function (a, b) {
+            return a.length - b.length;
+        });
+
+        var table = '<table border="1"><tr><th>Mot</th><th>Longueur</th></tr>';
+        words.forEach(function (word) {
+            table += '<tr><td>' + word + '</td><td>' + word.length + '</td></tr>';
+        });
+        table += '</table>';
+
+        var analysisDiv = document.getElementById('page-analysis');
+        analysisDiv.innerHTML = '<p>Nombre total de mots : ' + totalWords + '</p>' + table;
+    };
+
+    reader.readAsText(file);
+}
