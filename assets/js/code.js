@@ -74,3 +74,32 @@ function segmentation() {
     reader.readAsText(file);
 }
 
+function tokenizer(text) {
+    var words = text.split(/\s+/);
+    return words;
+}
+
+
+function afficherCooccurrents(mot, intervalleDeLongueur) {
+    var file = document.getElementById('fileInput').files[0];
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+        var content = e.target.result;
+        var words = tokenizer(content); 
+        var cooccurrents = [];
+
+        words.forEach(function (word) {
+            if (word.length >= intervalleDeLongueur[0] && word.length <= intervalleDeLongueur[1] && word !== mot) {
+                if (word.includes(mot) || mot.includes(word)) {
+                    cooccurrents.push(word);
+                }
+            }
+        });
+
+        console.log('Cooccurrents pour le mot "' + mot + '" dans un intervalle de longueur de ' + intervalleDeLongueur[0] + ' à ' + intervalleDeLongueur[1] + ':');
+        console.log(cooccurrents);
+    };
+
+    reader.readAsText(file);
+}
