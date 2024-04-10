@@ -71,7 +71,7 @@ function tokenizer(text) {
 
 
 function afficherCooccurrents() {
-    var mot = document.getElementById('motInput').value;
+    var mot = document.getElementById('poleID').value;
     var minLength = parseInt(document.getElementById('minLengthInput').value);
     var maxLength = parseInt(document.getElementById('maxLengthInput').value);
     var intervalleDeLongueur = [minLength, maxLength];
@@ -102,7 +102,7 @@ function afficherCooccurrents() {
             alert("Le terme '" + mot + "' ne se trouve pas dans le texte.");
             return;
         }
-        
+
         words.forEach(function (word, index) {
             if (word.length >= intervalleDeLongueur[0] && word.length <= intervalleDeLongueur[1] && word !== mot) {
                 if (word.includes(mot) || mot.includes(word)) {
