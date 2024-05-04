@@ -84,4 +84,35 @@ h1 {
 	margin-top: 0;
 	color:black;
 }
+.ct-chart {
+	height: 500px	
+}
 
+#centre {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+#boutton_help {
+	margin: auto;
+}
+
+#help {
+	box-sizing: content-box;
+	border-radius: 5px;
+	padding: 10px 20px 10px;
+	margin-top: 10px;
+	border: 1px black solid;
+	background-color: #11111160;
+	text-align: center;
+	opacity: 0;
+	transition: 0.4s;
+	height: 0
+}
+
+#help.show {
+	opacity: 1;
+	height: 420px;
+}

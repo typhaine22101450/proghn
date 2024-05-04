@@ -25,129 +25,197 @@ window.onload = function() {
     });
 }
 
+var afficherAide = false;
+function ChangerAide() {
+    let div = document.getElementById('help')
 
-function segmentation() {
+    if (afficherAide) {
+        afficherAide = false;
+        div.classList = ""
+    }
+    else {
+        afficherAide = true;
+        div.classList = "show"
+    }
+
+}
+
+function readFile(ready) {
     var file = document.getElementById('fileInput').files[0];
     var reader = new FileReader();
 
     reader.onload = function (e) {
         var content = e.target.result;
-        var words = content.split(/\s+/);
-        var wordStats = {};
+        ready(tokenizer(content.toLowerCase()));
+    }
 
+    reader.readAsText(file)
+}
+
+function segmentation() {
+    readFile(function(content) {
+        var words = content;
+        var wordStats = {};
+    
         words.forEach(function (word) {
             var length = word.length;
-
+    
             if (!wordStats[length]) {
                 wordStats[length] = {
                     count: 0,
                     uniqueForms: new Set()
                 };
             }
-
+    
             wordStats[length].count++;
             wordStats[length].uniqueForms.add(word);
         });
-
+    
        
         var table = '<table border="1"><tr><th>Nombre de caractères</th><th>Nombre d\'occurrences</th><th>Forme(s) unique(s)</th></tr>';
         for (var length in wordStats) {
             var stats = wordStats[length];
-            table += '<tr><td>' + length + '</td><td>' + stats.count + '</td><td>' + Array.from(stats.uniqueForms).join(', ') + '</td></tr>';
+            var uniqueForms = Array.from(stats.uniqueForms);
+            table += `<tr>
+                        <td>
+                            ${length}
+                        </td>
+                        <td>
+                            ${stats.count}
+                        </td>
+                        <td>
+                            ${uniqueForms.join(', ')}
+                            (${uniqueForms.length})
+                        </td>
+                    </tr>`
+    
         }
         table += '</table>';
-
+    
         var analysisDiv = document.getElementById('page-analysis');
         analysisDiv.innerHTML = table;
-    };
-
-    reader.readAsText(file);
+    });
 }
 
 function tokenizer(text) {
-    var words = text.split(/\s+/);
+    let delims = document.getElementById('delimID').value;
+    const regex = new RegExp("[" + Array.from(delims).map((e) => '\\' + e + '\n' + "\r") + "]");
+    var words = text.split(regex);
+    words = words.filter((word) => word.length && word !== " ");
     return words;
 }
 
-
-function afficherCooccurrents() {
+function calculerCooccurrents(ready) {
     var mot = document.getElementById('poleID').value;
-    var minLength = 0;
-    var maxLength = parseInt(document.getElementById('lgID').value);
-    var intervalleDeLongueur = [minLength, maxLength];
-
+    var maxDistance = parseInt(document.getElementById('lgID').value) + 1;
+    
     if (!mot.trim()) {
         alert("Veuillez entrer un terme.");
         return;
     }
-
-    if (isNaN(minLength) || isNaN(maxLength) || minLength < 0 || maxLength < minLength) {
-        alert("Veuillez entrer des valeurs valides pour l'intervalle de longueur.");
+    
+    if (isNaN(maxDistance)) {
+        alert("Veuillez entrer des valeurs valides pour l'intervalle de distance.");
         return;
     }
-
-    var file = document.getElementById('fileInput').files[0];
-    var reader = new FileReader();
-
-    reader.onload = function (e) {
-        var content = e.target.result;
-        var words = tokenizer(content);
-
-        var cooccurrents = [];
-
+    
+    readFile(function(words) {
+        var cooccurrents = {};
+    
         if (!words.includes(mot)) {
             alert("Le terme '" + mot + "' ne se trouve pas dans le texte.");
             return;
         }
-
+    
         words.forEach(function (word, index) {
-            if (word.length >= intervalleDeLongueur[0] && word.length <= intervalleDeLongueur[1] && word === mot) {
-                if (words[index - 1])
-                    cooccurrents.push(words[index - 1])
-                if (words[index + 1])
-                    words[index + 1]
-                cooccurrents.push(words[index + 1])
+            if (word === mot) {
+                const wordsLeft = words.slice(index - maxDistance, index);
+                const wordsRight = words.slice(index, index + maxDistance);
+                wordsLeft.forEach(function (word) {
+                    if (word !== mot) {
+                        let cooccurrent = cooccurrents[word];
+                        if (cooccurrent)
+                            cooccurrent.frequenceGauche = cooccurrent.frequenceGauche + 1;
+                        else
+                            cooccurrents[word] = { frequenceGauche: 1, frequenceDroite: 0 };
+                    }
+                })
+                wordsRight.forEach(function (word) {
+                    if (word !== mot) {
+                        let cooccurrent = cooccurrents[word];
+                        if (cooccurrent)
+                            cooccurrent.frequenceDroite = cooccurrent.frequenceDroite + 1;
+                        else
+                            cooccurrents[word] = { frequenceGauche: 0, frequenceDroite: 1 };
+                    }
+                })
             }
         });
-        cooccurrents = [...new Set(cooccurrents)];
+    
+        for (let word in cooccurrents) {
+            var cooccurrent = cooccurrents[word];
+            var coFrequence = cooccurrent.frequenceGauche + cooccurrent.frequenceDroite;
+            var pourcentageFrequenceGauche = cooccurrent.frequenceGauche / coFrequence * 100;
+            var pourcentageFrequenceDroite = cooccurrent.frequenceDroite / coFrequence * 100;
+            
+            cooccurrent.mot = word;
+            cooccurrent.coFrequence = coFrequence;
+            cooccurrent.pourcentageFrequenceGauche = pourcentageFrequenceGauche;
+            cooccurrent.pourcentageFrequenceDroite = pourcentageFrequenceDroite;
+        }
+    
+        ready(cooccurrents);
+    })
+}
 
+
+function afficherCooccurrents() {
+    calculerCooccurrents(function(cooccurrents) {
         var table = '<table border="1"><tr><th>Cooccurrent(s)</th><th>Co-fréquence</th><th>Fréquence gauche</th><th>% Fréquence gauche</th><th>Fréquence droite</th><th>% Fréquence droite</th></tr>';
-        cooccurrents.forEach(function (cooccurrent) {
-            var frequenceGauche = 0;
-            var frequenceDroite = 0;
-            var coFrequence = 0;
-            words.forEach(function (word, index) {
-                if (word === cooccurrent) {
-                    if (index > 0 && words[index - 1] === mot) {
-                        frequenceDroite++;
-                        coFrequence++;
-                    }
-
-                    if (index < words.length - 1 && words[index + 1] === mot) {
-                        frequenceGauche++;
-                        coFrequence++;
-                    }
-                }
-            });
-
-            var pourcentageFrequenceGauche = coFrequence !== 0 ? (frequenceGauche / coFrequence) * 100 : 0;
-            var pourcentageFrequenceDroite = coFrequence !== 0 ? (frequenceDroite / coFrequence) * 100 : 0;            
+        for (let word in cooccurrents) {
+            var cooccurrent = cooccurrents[word];
             table += '<tr>';
-            table += '<td>' + cooccurrent + '</td>';
-            table += '<td>' + coFrequence + '</td>';
-            table += '<td>' + frequenceGauche + '</td>';
-            table += '<td>' + pourcentageFrequenceGauche.toFixed(2) + '%</td>';
-            table += '<td>' + frequenceDroite + '</td>';
-            table += '<td>' + pourcentageFrequenceDroite.toFixed(2) + '%</td>';
+            table += '<td>' + word + '</td>';
+            table += '<td>' + cooccurrent.coFrequence + '</td>';
+            table += '<td>' + cooccurrent.frequenceGauche + '</td>';
+            table += '<td>' + cooccurrent.pourcentageFrequenceGauche.toFixed(2) + '%</td>';
+            table += '<td>' + cooccurrent.frequenceDroite + '</td>';
+            table += '<td>' + cooccurrent.pourcentageFrequenceDroite.toFixed(2) + '%</td>';
             table += '</tr>';
-        });
+        }
         table += '</table>';
-
+    
         var analysisDiv = document.getElementById('page-analysis');
         analysisDiv.innerHTML = table;
-    };
-
-    reader.readAsText(file);
+    })
+    
 }
+
+function afficherCooccurrentsGraphique() {
+    calculerCooccurrents(function(cooccurrents) {
+        var options = {
+            horizontalBars: true,
+        };
+
+        var list = Object.values(cooccurrents).sort((mot1, mot2) => mot2.coFrequence - mot1.coFrequence).slice(0, 9);
+        
+        var data = {
+            labels: list.map((cooccurrent) => cooccurrent.mot).reverse(),
+            series: [
+                list.map(cooccurrent => cooccurrent.frequenceDroite).reverse(),
+                list.map(cooccurrent => cooccurrent.frequenceGauche).reverse(),
+                list.map(cooccurrent => cooccurrent.coFrequence).reverse(),
+            ]
+        }
+        
+        var analysisDiv = document.getElementById('page-analysis');
+        analysisDiv.innerHTML = '<div class="ct-chart ct-golden-section"></div>';
+        new Chartist.Bar('.ct-chart', data, options);
+    
+    })
+    
+}
+
+
 
 

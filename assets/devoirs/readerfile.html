@@ -6,7 +6,9 @@
     <link rel="shortcut icon" href="http://www.tal.univ-paris3.fr/plurital/logo.ico">
     <title>Lecture des données dans un fichier...</title>
     <script type="text/javascript" language="javascript" src="../js/code.js"></script>
+    <script type="text/javascript" language="javascript" src="../library/chartist.js"></script>
     <link rel="stylesheet" href="../css/monstyle.css" />
+    <link rel="stylesheet" href="../library/chartist.css" />
 </head>
 
 <body>
@@ -43,17 +45,32 @@
                     </small>
                     <br />
                     <br />
-                    <button onclick="alert('bonjour');"><span>Bonjour</span></button>
+                    <button onclick="alert('Télécharge un fichier et amuses toi à l\'analyser !');"><span>Bonjour</span></button>
                     <br />
                     <br />
                     <button class="submit" onclick="segmentation();"><span>Segmentation</span></button>
                     <button class="submit" onclick="afficherCooccurrents()">Cooccurrents/fréquence</button>
-                    <button class="submit" onclick="alert('Je ne fais rien, changez-moi !')"><span>action 2</span></button>
-                    <button class="submit" onclick="alert('Je ne fais rien, changez-moi !')"><span>action 3</span></button>
-                    <button class="submit" onclick="alert('Je ne fais rien, changez-moi !')"><span>action 4</span></button>
-                    <button class="submit" onclick="alert('Je ne fais rien, changez-moi !')"><span>action 5</span></button>
-                    <button class="submit" onclick="alert('Je ne fais rien, changez-moi !')"><span>action 6</span></button>
+                    <button class="submit" onclick="afficherCooccurrentsGraphique()"><span>Visualisation Cooccurrents</span></button>
                 </p>
+                <div id="centre">
+                    <button id="boutton_help" onclick="ChangerAide()">Aide</button>
+                </div>
+                <div id="help">
+                    <strong>Bienvenue dans le centre d'aide ! <br/></strong>
+                    Nous vous expliquons ici à quoi servent les différents boutons.<br/>
+                    <br/>
+                    <strong>Segmentation</strong> : cliquez dessus pour segmenter votre texte en mots. Vous connaitrez ainsi toutes les formes uniques présentes, leur nombre d'occurences, triées par leur nombre de caractère. <br/>
+                    Vous pouvez utiliser les délimiteurs par défaut ou les personnaliser à votre guise.<br/>
+                    <br/>
+                    <strong>Cooccurrents/fréquence</strong> : cliquez dessus pour visualiser sous forme de tableau les cooccurrences du mot cible (à inscrire dans "pôle"). 
+                    Vous pouvez également entrer une "longueur" qui vous permettra de donner une distance maximale entre votre mot cible et ses cooccurrents.<br/>
+                    Le tableau vous précisera également la fréquence gauche et droite des cooccurrents ainsi que la cofréquence.<br/>
+                    <br/>
+                    <strong>Visualisation Cooccurrents</strong> : cliquez dessus pour afficher les mêmes résultats que pour "Cooccurrents/fréquences" mais sous forme d'un graphique en barre. <br/>
+                    Barre jaune : Cofréquence<br/>
+                    Barre orange : Fréquence gauche<br/>
+                    Barre rouge : Fréquence droite<br/>
+                </div>
             </div>
             <div id="logger" style="width:100%"></div>
             <br />
